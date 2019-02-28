@@ -9,7 +9,7 @@ const corsOptions = {
 };
 
 app.get('/:pkg', cors(corsOptions), (req, res) => {
-    const { pkg} = req.params;
+    const { pkg } = req.params;
 
     rp({
         url: `https://registry.npmjs.org/${pkg}/latest`,

@@ -7,8 +7,8 @@ class App extends Component {
 
     this.state = {
       packageInfo: null,
-      packageDeps: null,
-      packageDevDeps: null,
+      packageDeps: [],
+      packageDevDeps: [],
     };
   }
 
@@ -17,34 +17,42 @@ class App extends Component {
       .then(response => response.json())
       .then(response => {
         const { dependencies, devDependencies } = response.body;
-        console.log(dependencies, devDependencies)
         Object.keys(dependencies).map(deps => {
-          console.log('DEPS', deps)
           fetch(`http://localhost:1111/${deps}`)
             .then(resp => resp.json())
             .then(resp => {
-              this.setState({packageDeps: resp});
+              this.state.packageDeps.push(resp)
             })
         });
         Object.keys(devDependencies).map(devDeps => {
           fetch(`http://localhost:1111/${devDeps}`)
             .then(resp => resp.json())
             .then(resp => {
-              this.setState({packageDevDeps: resp});
+              this.state.packageDevDeps.push(resp)
             })
         });
         this.setState({packageInfo: response});
       });
   }
 
+  renderDeps() {
+    const { packageDeps, packageDevDeps } = this.state;
+    console.log(packageDeps);
+    
+    const dependencies = packageDeps.map(dep => <li>{dep[0].body.name}</li>);
+
+    return dependencies;
+  }
+
   render() {
     const { packageInfo } = this.state;
-    console.log(this.state)
     return (
       <div className="App">
         <header className="App-header">
           <div>
-            
+            <ul>
+              
+            </ul>
           </div>
         </header>
       </div>
