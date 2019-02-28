@@ -23,6 +23,8 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "corsproxy": "^1.5.0"
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "request-promise": "^4.2.4"
   }
 }

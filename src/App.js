@@ -6,22 +6,46 @@ class App extends Component {
     super(props);
 
     this.state = {
-      data: null,
+      packageInfo: null,
+      packageDeps: null,
+      packageDevDeps: null,
     };
   }
 
   componentDidMount() {
-    fetch('https://crossorigin.me/https://registry.npmjs.org/')
+    fetch('http://localhost:1111/express')
       .then(response => response.json())
-      .then(data => this.setState({ data }));
+      .then(response => {
+        const { dependencies, devDependencies } = response.body;
+        console.log(dependencies, devDependencies)
+        Object.keys(dependencies).map(deps => {
+          console.log('DEPS', deps)
+          fetch(`http://localhost:1111/${deps}`)
+            .then(resp => resp.json())
+            .then(resp => {
+              this.setState({packageDeps: resp});
+            })
+        });
+        Object.keys(devDependencies).map(devDeps => {
+          fetch(`http://localhost:1111/${devDeps}`)
+            .then(resp => resp.json())
+            .then(resp => {
+              this.setState({packageDevDeps: resp});
+            })
+        });
+        this.setState({packageInfo: response});
+      });
   }
 
   render() {
-    const { data } = this.state;
+    const { packageInfo } = this.state;
+    console.log(this.state)
     return (
       <div className="App">
         <header className="App-header">
-          {data}
+          <div>
+            
+          </div>
         </header>
       </div>
     );
